@@ -1,7 +1,9 @@
 // Step 1: Check if JavaScript is linked correctly
-console.log("Hello World");
+// Variables to keep track of scores
+let humanScore = 0;
+let computerScore = 0;
 
-// Step 2: Function to get computer's choice
+// Function to get computer's choice
 function getComputerChoice() {
     const randomNum = Math.random();
     if (randomNum < 0.33) return "rock";
@@ -9,38 +11,67 @@ function getComputerChoice() {
     else return "scissors";
 }
 
-// Step 3: Function to get human's choice
-function getHumanChoice() {
-    let choice = prompt("Enter Rock, Paper, or Scissors:");
-    return choice.toLowerCase();
-}
+// Function to play a single round
+function playRound(humanChoice) {
+    const computerChoice = getComputerChoice();
+    let resultMessage = '';
 
-// Step 4: Declare score variables
-let humanScore = 0;
-let computerScore = 0;
-
-// Step 5: Function to play a single round
-function playRound(humanChoice, computerChoice) {
-    humanChoice = humanChoice.toLowerCase();
-    
+    // Determine the result and update scores
     if (humanChoice === computerChoice) {
-        console.log("It's a tie!");
-        return "tie";
+        resultMessage = "It's a tie!";
     } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
         (humanChoice === "scissors" && computerChoice === "paper")
     ) {
-        console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+        resultMessage = `You win! ${humanChoice} beats ${computerChoice}`;
         humanScore++;
-        return "human";
     } else {
-        console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+        resultMessage = `You lose! ${computerChoice} beats ${humanChoice}`;
         computerScore++;
-        return "computer";
+    }
+
+    // Update the message and score display
+    updateDisplay(resultMessage);
+    
+    // Check if we have a winner
+    if (humanScore === 5 || computerScore === 5) {
+        declareWinner();
     }
 }
 
+// Function to update the display
+function updateDisplay(message) {
+    const messageDiv = document.getElementById('message');
+    const scoreDiv = document.getElementById('score');
+    messageDiv.textContent = message;
+    scoreDiv.textContent = `Player: ${humanScore} - Computer: ${computerScore}`;
+}
+
+// Function to declare the winner and reset the game
+function declareWinner() {
+    const messageDiv = document.getElementById('message');
+    if (humanScore === 5) {
+        messageDiv.textContent = "Congratulations! You are the overall winner!";
+    } else if (computerScore === 5) {
+        messageDiv.textContent = "Computer wins the game. Better luck next time!";
+    }
+    // Reset scores after the game ends
+    humanScore = 0;
+    computerScore = 0;
+}
+
+const btn = document.querySelectorAll('button')
+
+    btn.forEach(button => {
+        button.addEventListener('click',() => 
+            playRound(button.id));
+        });
+
+        
+    
+
+/*
 // Step 6: Function to play the entire game
 function playGame() {
     // Reset scores at the start
@@ -64,3 +95,4 @@ function playGame() {
 
 // Start the game
 playGame();
+*/
